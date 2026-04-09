@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Routes, Route, Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { useData } from '../../context/DataContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   LayoutDashboard, 
@@ -483,6 +484,7 @@ const SettingsManager = () => {
 
 // --- Profile Manager Sub-component ---
 const ProfileManager = () => {
+  const { refreshData } = useData();
   const [currentAvatar, setCurrentAvatar] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -515,6 +517,7 @@ const ProfileManager = () => {
       setCurrentAvatar(res.data.avatarUrl);
       setStatus({ type: 'success', text: 'Avatar updated!' });
       setSelectedFile(null);
+      refreshData(); // Refresh global site data
     } catch (err) {
       setStatus({ type: 'error', text: 'Upload failed' });
     } finally {
@@ -531,6 +534,14 @@ const ProfileManager = () => {
       </div>
 
       <div className="glass-dark p-12 rounded-3xl border border-white/5 flex flex-col items-center">
+        {status.text && (
+          <div className={`w-full mb-8 p-4 rounded-2xl flex items-center gap-3 border ${
+            status.type === 'success' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-red-500/10 border-red-500/30 text-red-400'
+          }`}>
+            <CheckCircle2 size={18} />
+            <span className="text-sm font-bold uppercase tracking-widest">{status.text}</span>
+          </div>
+        )}
         <div className="relative group mb-12">
           <div className="absolute -inset-1 bg-gradient-to-r from-gold to-emerald-dark rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
           <div className="relative w-48 h-48 rounded-full border-4 border-gold/30 overflow-hidden bg-charcoal flex items-center justify-center">

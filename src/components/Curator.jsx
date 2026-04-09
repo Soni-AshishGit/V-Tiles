@@ -44,8 +44,17 @@ const Curator = () => {
             {settings?.avatarUrl ? (
               <img src={settings.avatarUrl} alt="Vijay Soni" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
             ) : (
-              <User size={60} className="text-white/10" />
+              <img 
+                src="/assets/profile/vijay-soni.png" 
+                alt="Vijay Soni" 
+                className="w-full h-full object-cover opacity-80"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'block';
+                }}
+              />
             )}
+            <User size={60} className="text-white/10 hidden" />
           </div>
         </motion.div>
 

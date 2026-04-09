@@ -564,8 +564,17 @@ const ProfileManager = () => {
             {currentAvatar ? (
               <img src={currentAvatar} alt="Vijay Sir" className="w-full h-full object-cover" />
             ) : (
-              <User size={80} className="text-white/10" />
+              <img 
+                src="/assets/profile/vijay-soni.png" 
+                alt="Vijay Sir" 
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'block';
+                }}
+              />
             )}
+            <User size={80} className="text-white/10 hidden" />
           </div>
         </div>
 

@@ -84,13 +84,22 @@ const Hero = () => {
           
           {/* Avatar Container */}
           <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden border-4 border-gold/30 shadow-[0_0_60px_rgba(212,175,55,0.2)] bg-gradient-to-br from-charcoal to-black flex items-center justify-center transition-all duration-700">
-            {/* Using a dynamic image or Lucide Icon as a placeholder for the avatar */}
+            {/* Using a dynamic image, static default, or Lucide Icon as a placeholder */}
             <div className="text-gold/20 absolute inset-0 flex items-center justify-center p-8">
                {settings?.avatarUrl ? (
                  <img src={settings.avatarUrl} alt="Vijay Soni" className="w-full h-full object-cover" />
                ) : (
-                 <User className="w-full h-full opacity-50" strokeWidth={0.5} />
+                 <img 
+                   src="/assets/profile/vijay-soni.png" 
+                   alt="Vijay Soni" 
+                   className="w-full h-full object-cover opacity-80"
+                   onError={(e) => {
+                     e.target.style.display = 'none';
+                     e.target.nextSibling.style.display = 'block';
+                   }}
+                 />
                )}
+               <User className="w-full h-full opacity-50 hidden" strokeWidth={0.5} />
             </div>
             
             {/* Optional: Overlay Gradient */}

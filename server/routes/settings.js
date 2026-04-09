@@ -40,13 +40,14 @@ router.get('/', async (req, res) => {
 
 // Update general settings
 router.post('/', auth, async (req, res) => {
-  const { whatsappNumber, socialMedia } = req.body;
+  const { whatsappNumber, socialMedia, bio } = req.body;
   try {
     let settings = await Settings.findOne();
     if (!settings) settings = new Settings();
 
     if (whatsappNumber) settings.whatsappNumber = whatsappNumber;
     if (socialMedia) settings.socialMedia = socialMedia;
+    if (bio) settings.bio = bio;
     
     settings.updatedAt = Date.now();
     await settings.save();

@@ -1,10 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Award, Star, History, MapPin } from 'lucide-react';
+import { Award, Star, History, MapPin, User } from 'lucide-react';
+import { useData } from '../context/DataContext';
 
 const Curator = () => {
   const { t } = useTranslation();
+  const { settings } = useData();
 
   const stats = [
     { icon: <History size={20} />, value: "20+", label: "Years Experience" },
@@ -31,13 +33,29 @@ const Curator = () => {
           {t('curator_title')}
         </motion.h2>
 
+        {/* Dynamic Avatar */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          className="mb-12 relative inline-block group"
+        >
+          <div className="absolute -inset-1 bg-gradient-to-r from-gold/50 to-emerald-dark/50 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000"></div>
+          <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-gold/30 overflow-hidden bg-charcoal flex items-center justify-center">
+            {settings?.avatarUrl ? (
+              <img src={settings.avatarUrl} alt="Vijay Soni" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+            ) : (
+              <User size={60} className="text-white/10" />
+            )}
+          </div>
+        </motion.div>
+
         <motion.p 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
           className="text-white/80 font-english text-base md:text-lg leading-relaxed mb-16 text-center max-w-2xl mx-auto"
         >
-          Vijay Soni is a visionary curator of architectural elegance, specializing in the finest ceramic and porcelain tiles from Morbi, India's tile capital. With over two decades of expertise, he bridges the gap between raw craftsmanship and industrial luxury.
+          {settings?.bio || "Vijay Soni is a visionary curator of architectural elegance, specializing in the finest ceramic and porcelain tiles from Morbi, India's tile capital. With over two decades of expertise, he bridges the gap between raw craftsmanship and industrial luxury."}
         </motion.p>
 
         {/* Stats Grid */}

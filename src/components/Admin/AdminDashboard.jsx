@@ -384,7 +384,12 @@ const TilesManager = () => {
 
 // --- Settings Manager Sub-component ---
 const SettingsManager = () => {
-  const [settings, setSettings] = useState({ whatsappNumber: '', socialMedia: { instagram: '', linkedin: '', whatsapp: '' } });
+  const { refreshData } = useData();
+  const [settings, setSettings] = useState({ 
+    whatsappNumber: '', 
+    bio: '',
+    socialMedia: { instagram: '', linkedin: '', whatsapp: '' } 
+  });
   const [isSaving, setIsSaving] = useState(false);
   const [status, setStatus] = useState({ type: '', text: '' });
 
@@ -409,6 +414,7 @@ const SettingsManager = () => {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       setStatus({ type: 'success', text: 'Settings updated instantly!' });
+      refreshData();
     } catch (err) {
       setStatus({ type: 'error', text: 'Update failed' });
     } finally {
@@ -421,7 +427,7 @@ const SettingsManager = () => {
     <div className="max-w-2xl space-y-8">
       <div className="bg-white/5 p-8 rounded-3xl border border-white/5">
         <h3 className="text-2xl font-bold font-gujarati text-gold">કોન્ટેક્ટ સેટિંગ્સ</h3>
-        <p className="text-white/40 text-xs font-bold uppercase tracking-widest mt-1">Update Social & WhatsApp Links</p>
+        <p className="text-white/40 text-xs font-bold uppercase tracking-widest mt-1">Update Social, WhatsApp & Bio</p>
       </div>
 
       {status.text && (
@@ -435,6 +441,16 @@ const SettingsManager = () => {
 
       <form onSubmit={handleSave} className="space-y-6">
         <div className="glass-dark p-8 rounded-3xl border border-white/5 space-y-8">
+          <div className="space-y-2">
+            <label className="text-white/60 text-[10px] font-bold uppercase tracking-widest ml-1">Curator Bio</label>
+            <textarea
+              value={settings.bio}
+              onChange={(e) => setSettings({...settings, bio: e.target.value})}
+              className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-5 text-white focus:border-gold/50 transition-all font-english resize-none min-h-[120px]"
+              placeholder="Enter curator biography..."
+            />
+          </div>
+
           <div className="space-y-2">
             <label className="text-white/60 text-[10px] font-bold uppercase tracking-widest ml-1">WhatsApp Number (with country code)</label>
             <div className="relative group">

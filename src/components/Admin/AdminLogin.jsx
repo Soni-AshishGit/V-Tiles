@@ -5,33 +5,34 @@ import { motion } from 'framer-motion';
 import { Lock, Mail, User, ArrowRight } from 'lucide-react';
 
 const AdminLogin = () => {
+  const [isLogin, setIsLogin] = useState(true);
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleAuth = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+
+    const url = isLogin 
+      ? 'http://localhost:5000/api/auth/login' 
+      : 'http://localhost:5000/api/auth/register';
     
-    // Development Phase: Dummy Login
-    if (email === 'admin@vijay.com' && password === 'vijay123') {
-      localStorage.setItem('adminToken', 'dummy-token-for-dev');
-      localStorage.setItem('adminData', JSON.stringify({ id: 'dummy', username: 'Vijay Sir', email: 'admin@vijay.com' }));
-      navigate('/admin/dashboard');
-      setLoading(false);
-      return;
-    }
+    const payload = isLogin 
+      ? { email, password } 
+      : { username, email, password };
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const res = await axios.post(url, payload);
       localStorage.setItem('adminToken', res.data.token);
       localStorage.setItem('adminData', JSON.stringify(res.data.admin));
       navigate('/admin/dashboard');
     } catch (err) {
-      setError(err.response?.data?.msg || 'Login failed. Please try again.');
+      setError(err.response?.data?.msg || 'Authentication failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -59,8 +60,12 @@ const AdminLogin = () => {
           >
             <Lock className="text-gold" size={32} />
           </motion.div>
-          <h1 className="text-gold font-gujarati text-3xl font-bold mb-2">એડમિન પોર્ટલ</h1>
-          <p className="text-white/40 text-xs uppercase tracking-widest font-bold font-english">Vijay Sir's Command Center</p>
+          <h1 className="text-gold font-gujarati text-3xl font-bold mb-2">
+            {isLogin ? 'એડમિન લોગિન' : 'એડમિન રજીસ્ટ્રેશન'}
+          </h1>
+          <p className="text-white/40 text-xs uppercase tracking-widest font-bold font-english">
+            {isLogin ? "Vijay Sir's Command Center" : "Create New Admin Account"}
+          </p>
         </div>
 
         {error && (
@@ -74,7 +79,26 @@ const AdminLogin = () => {
           </motion.div>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-6">
+        <form onSubmit={handleAuth} className="space-y-6">
+          {!isLogin && (
+            <div className="space-y-2">
+              <label className="text-white/60 text-xs font-bold uppercase tracking-widest ml-1">Username</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <User size={18} className="text-white/30 group-focus-within:text-gold transition-colors" />
+                </div>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-gold/50 focus:bg-white/10 transition-all duration-300 placeholder:text-white/20 font-english"
+                  placeholder="Enter your username"
+                  required={!isLogin}
+                />
+              </div>
+            </div>
+          )}
+
           <div className="space-y-2">
             <label className="text-white/60 text-xs font-bold uppercase tracking-widest ml-1">Email Address</label>
             <div className="relative group">
@@ -118,12 +142,21 @@ const AdminLogin = () => {
               <div className="w-5 h-5 border-2 border-charcoal/30 border-t-charcoal rounded-full animate-spin"></div>
             ) : (
               <>
-                Login to Dashboard
+                {isLogin ? 'Login to Dashboard' : 'Create Admin Account'}
                 <ArrowRight size={18} />
               </>
             )}
           </button>
         </form>
+
+        <div className="mt-6 text-center">
+          <button
+            onClick={() => setIsLogin(!isLogin)}
+            className="text-gold/60 hover:text-gold text-xs font-bold uppercase tracking-widest transition-colors"
+          >
+            {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Login"}
+          </button>
+        </div>
 
         <div className="mt-10 pt-8 border-t border-white/5 text-center">
           <p className="text-white/20 text-[10px] uppercase tracking-[0.2em] font-bold">

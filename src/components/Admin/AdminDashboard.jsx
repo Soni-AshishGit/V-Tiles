@@ -565,7 +565,7 @@ const ProfileManager = () => {
               <img src={currentAvatar} alt="Vijay Sir" className="w-full h-full object-cover" />
             ) : (
               <img 
-                src="/assets/profile/vijay-soni.png" 
+                src="/assets/profile/profile.jpg" 
                 alt="Vijay Sir" 
                 className="w-full h-full object-cover"
                 onError={(e) => {

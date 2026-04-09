@@ -45,7 +45,7 @@ const Curator = () => {
               <img src={settings.avatarUrl} alt="Vijay Soni" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
             ) : (
               <img 
-                src="/assets/profile/vijay-soni.png" 
+                src="/assets/profile/profile.jpg" 
                 alt="Vijay Soni" 
                 className="w-full h-full object-cover opacity-80"
                 onError={(e) => {
